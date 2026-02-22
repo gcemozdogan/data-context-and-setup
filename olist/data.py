@@ -16,14 +16,29 @@ class Olist:
     """
     def get_data(self):
         """
-        This function returns a Python dict.
-        Its keys should be 'sellers', 'orders', 'order_items' etc...
-        Its values should be pandas.DataFrames loaded from csv files
+        Reads all CSV files from ~/.workintech/olist/data/csv
+        and returns them as a dictionary of DataFrames.
         """
-        pass  # YOUR CODE HERE
+        # Define the path to the csv folder
+        csv_path = os.path.expanduser("~/.workintech/olist/data/csv")
+
+        # List all files in the directory ending with .csv
+        file_names = [f for f in os.listdir(csv_path) if f.endswith('.csv')]
+
+        # Create descriptive keys by removing 'olist_' prefix and '_dataset.csv' suffix
+        key_names = [f.replace('olist_', '').replace('_dataset.csv', '').replace('.csv', '')
+                     for f in file_names]
+
+        # Load each CSV into a DataFrame and store in a dictionary
+        data = {}
+        for key, file in zip(key_names, file_names):
+            full_path = os.path.join(csv_path, file)
+            data[key] = pd.read_csv(full_path)
+
+        return data
 
     def ping(self):
         """
-        You call ping I print pong.
+        Standard connectivity test.
         """
         print("pong")
